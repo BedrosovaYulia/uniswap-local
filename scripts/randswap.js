@@ -32,14 +32,17 @@ const main = async () => {
     const bn = await provider.getBlockNumber();
     console.log('Block Number:', bn);
 
+    const intAmountIn = Math.floor(Math.random() * 100) + 1; // Random value between 1 and 100
+
     await signer.sendTransaction({
         to: WETH_ADDRESS,
-        value: ethers.parseUnits('5', 18)
+        value: ethers.parseUnits(intAmountIn.toString(), 18)
     })
     logBalances()
 
     let nonce = await provider.getTransactionCount(signer.getAddress());
-    const amountIn = ethers.parseUnits('1', 18)
+    
+    const amountIn = ethers.parseUnits(intAmountIn.toString(), 18)
     const tx1 = await weth.connect(signer).approve(router.target, amountIn, { nonce })
     tx1.wait()
 
@@ -59,4 +62,4 @@ const main = async () => {
 
     logBalances()
 }
-main()
+setInterval(main, 10000);
